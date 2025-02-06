@@ -3,8 +3,8 @@ from django.http import HttpResponse
 from django.db.models import QuerySet, Q, Count, Sum, Avg, Min, Max
 from django.core.paginator import Paginator
 
-from .forms import FindForm, FriendForm, CheckForm
-from .models import Friend
+from .forms import FindForm, FriendForm, CheckForm, MessageForm
+from .models import Friend, Message
 
 def index(request, num=1):
     data = Friend.objects.all().order_by("age").reverse()
@@ -90,3 +90,17 @@ def check(request):
         else:
             params["message"] = "no good."
     return render(request, "hello/check.html", params)
+
+def message(request, page=1):
+    if(request.method == "POST"):
+        obj = Message()
+        form = MessageForm(request.POST, instance=obj)
+        form.save()
+    data = Message.objects.all().reverse()
+    paginator = Paginator(data, 3)
+    params = {
+        "title": "Message",
+        "form": MessageForm(),
+        "data": paginator.get_page(page),
+    }
+    return render(request, "hello/message.html", params)
