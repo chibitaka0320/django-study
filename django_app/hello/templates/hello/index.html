@@ -18,6 +18,7 @@
         <th>age</th>
         <th>mail</th>
         <th>birthday</th>
+        <th>Messages</th>
         <th></th>
         <th></th>
       </tr>
@@ -28,6 +29,13 @@
           <td>{{item.age}}</td>
           <td>{{item.mail}}</td>
           <td>{{item.birthday}}</td>
+          <td>
+            <ul>
+              {% for ob in item.message_set.all %}
+                <li>{{ob.title}}</li>
+              {% endfor %}
+            </ul>
+          </td>
           <td>
             <a href="{% url 'edit' item.id %}">Edit</a>
           </td>
